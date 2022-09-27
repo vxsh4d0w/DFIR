@@ -12,6 +12,6 @@ I tried to base this repo on my daily operations not only to make every analysis
 
 
 ## 1. DFIR Tools ##
-This section provides s list of tools that each DFIR expert should use to condict an investigazion.
+This section provides s list of tools that each DFIR expert should use to condict an investigation.
 The list was divided according different needs and steps, from the extraction to the analysis fo every single artifact, and it includes only free available
 resources.
