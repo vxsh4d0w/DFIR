@@ -5,4 +5,12 @@ I tried to build something during my daily operations not only to make every ana
 **Sections**
 
 1. DFIR Tools
-2. Event Analys Model
+2. Event Analysis Model
+3. Playbooks
+
+
+
+## DFIR Tools ##
+This section includes a list of tool that each DFIR expert can use to manage an investigazion.
+The list was divided according different needs and steps and includes only free available
+resources.
