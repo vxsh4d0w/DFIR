@@ -10,7 +10,8 @@ I tried to build something during my daily operations not only to make every ana
 
 
 
-## DFIR Tools ##
+
+## 1. DFIR Tools ##
 This section includes a list of tool that each DFIR expert can use to manage an investigazion.
 The list was divided according different needs and steps and includes only free available
 resources.
