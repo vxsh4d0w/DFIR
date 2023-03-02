@@ -9,7 +9,7 @@ chocolately to easily install any other tool or package by cli.
 2. Powershell configuration script (based on the one provided by https://github.com/tinohager)
 
 
-## 1. Unattended File ##
+## 1. Unattended Installation File ##
 This section provides a copy of the xml configuration file that should be included within the root folder of Win10 iso image to be executed to automate each
 installation and configuration step.
 1. Download a copy of Windows 10 iso
