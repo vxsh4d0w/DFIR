@@ -1,4 +1,4 @@
-## 1. Unattended Installation File ##
+# Unattended Installation File ##
 This section provides a copy of the xml configuration file that should be included within the root folder of Win10 iso image to be executed to automate each
 installation and configuration step.
 1. Download a copy of Windows 10 iso
