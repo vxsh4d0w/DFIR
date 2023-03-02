@@ -8,9 +8,3 @@ chocolately to easily install any other tool or package by cli.
 1. Unattended File
 2. Powershell configuration script (based on the one provided by https://github.com/tinohager)
 
-## 2. Powershell Configuration Script ##
-This section contains a powershell script, based on Tino Hager customization, executed after first logon, that runs several steps like:
-- Customize Power Plan
-- NuGet installation
-- Windows Updates installation
-- Chocolately package manager installation (and several applications)
