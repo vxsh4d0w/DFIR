@@ -12,6 +12,70 @@ powercfg -change -standby-timeout-dc 0 | Out-Null
 powercfg -change -hibernate-timeout-ac 0 | Out-Null
 powercfg -change -hibernate-timeout-dc 0 | Out-Null
 
+# Install Chocolatey
+if (-Not (Test-Path "$($env:ProgramData)\chocolatey\choco.exe")) {
+    Set-ExecutionPolicy Bypass -Scope Process -Force
+    [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
+    Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+}
+
+# Install FlareVM Package Repo
+choco sources add -n="FlareVm" -s "https://www.myget.org/F/vm-packages/api/v2" --priority 1
+choco feature enable -n allowGlobalConfirmation
+choco feature enable -n allowEmptyChecksums
+
+# Required Chocolatey packages
+$requiredPackages = @([pscustomobject]@{Name="notepadplusplus";Trust=$False},
+                      [pscustomobject]@{Name="librewolf";Trust=$False},
+                      [pscustomobject]@{Name="googlechrome";Trust=$True},
+		      [pscustomobject]@{Name="ublockorigin-chrome";Trust=$True},
+		      [pscustomobject]@{Name="winscp";Trust=$True},
+		      [pscustomobject]@{Name="peazip";Trust=$True},
+		      [pscustomobject]@{Name="docker-desktop";Trust=$True},
+		      [pscustomobject]@{Name="putty";Trust=$True},
+		      [pscustomobject]@{Name="winscp";Trust=$True},
+		      [pscustomobject]@{Name="superputty";Trust=$True},
+		      [pscustomobject]@{Name="vlc";Trust=$True},
+		      [pscustomobject]@{Name="bleachbit";Trust=$True},
+                      [pscustomobject]@{Name="capa.vm";Trust=$True}
+                      [pscustomobject]@{Name="yara.vm";Trust=$True},
+                      [pscustomobject]@{Name="hxd.vm";Trust=$True},
+                      [pscustomobject]@{Name="cmder.vm";Trust=$True})
+					  
+
+# Load installed packages
+$installedPackages = New-Object Collections.Generic.List[String]
+$installedPackagesPath = Join-Path -Path $PSScriptRoot -ChildPath "installedPackages.txt"
+if (Test-Path $installedPackagesPath -PathType Leaf) {
+    $installedPackages.AddRange([string[]](Get-Content $installedPackagesPath))
+}
+
+# Calculate missing packages
+$missingPackages = $requiredPackages | Where-Object { $installedPackages -NotContains $_.Name }
+
+foreach ($package in $missingPackages) {
+    if ((Test-PendingReboot).IsRebootPending) {
+        Set-ItemProperty $runOnceRegistryPath -Name "UnattendInstall!" -Value "cmd /c powershell -ExecutionPolicy ByPass -File $PSCommandPath"
+        Restart-Computer -Force
+        return
+    }
+
+    if ($package.Trust) {
+        Write-Host "Install Package without checksum check"
+        choco install $package.Name -y --ignore-checksums
+    } else {
+        Write-Host "Install Package with checksum check"
+        choco install $package.Name -y
+    }
+
+    # Add package to installed package list
+    $installedPackages.Add($package.Name)
+
+    # Save update to file
+    $installedPackages | Out-File $installedPackagesPath
+}
+
+
 # Install Nuget PackageProvider
 #if (-Not (Get-PackageProvider -Name NuGet)) {
     Write-Host "Install Nuget PackageProvider"
@@ -76,70 +140,6 @@ if (Wait-Job $updateJob -Timeout $updateJobTimeoutSeconds) {
     Start-Sleep -s 10
 }
 Remove-Job -force $updateJob
-
-
-# Install Chocolatey
-if (-Not (Test-Path "$($env:ProgramData)\chocolatey\choco.exe")) {
-    Set-ExecutionPolicy Bypass -Scope Process -Force
-    [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
-    Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
-}
-
-# Install FlareVM Package Repo
-choco sources add -n="FlareVm" -s "https://www.myget.org/F/vm-packages/api/v2" --priority 1
-choco feature enable -n allowGlobalConfirmation
-choco feature enable -n allowEmptyChecksums
-
-# Required Chocolatey packages
-$requiredPackages = @([pscustomobject]@{Name="notepadplusplus";Trust=$False},
-                      [pscustomobject]@{Name="librewolf";Trust=$False},
-                      [pscustomobject]@{Name="googlechrome";Trust=$True},
-		      [pscustomobject]@{Name="ublockorigin-chrome";Trust=$True},
-		      [pscustomobject]@{Name="winscp";Trust=$True},
-		      [pscustomobject]@{Name="peazip";Trust=$True},
-		      [pscustomobject]@{Name="docker-desktop";Trust=$True},
-		      [pscustomobject]@{Name="putty";Trust=$True},
-		      [pscustomobject]@{Name="winscp";Trust=$True},
-		      [pscustomobject]@{Name="superputty";Trust=$True},
-		      [pscustomobject]@{Name="vlc";Trust=$True},
-		      [pscustomobject]@{Name="bleachbit";Trust=$True},
-                      [pscustomobject]@{Name="capa.vm";Trust=$True}
-                      [pscustomobject]@{Name="yara.vm";Trust=$True},
-                      [pscustomobject]@{Name="hxd.vm";Trust=$True},
-                      [pscustomobject]@{Name="cmder.vm";Trust=$True})
-					  
-
-# Load installed packages
-$installedPackages = New-Object Collections.Generic.List[String]
-$installedPackagesPath = Join-Path -Path $PSScriptRoot -ChildPath "installedPackages.txt"
-if (Test-Path $installedPackagesPath -PathType Leaf) {
-    $installedPackages.AddRange([string[]](Get-Content $installedPackagesPath))
-}
-
-# Calculate missing packages
-$missingPackages = $requiredPackages | Where-Object { $installedPackages -NotContains $_.Name }
-
-foreach ($package in $missingPackages) {
-    if ((Test-PendingReboot).IsRebootPending) {
-        Set-ItemProperty $runOnceRegistryPath -Name "UnattendInstall!" -Value "cmd /c powershell -ExecutionPolicy ByPass -File $PSCommandPath"
-        Restart-Computer -Force
-        return
-    }
-
-    if ($package.Trust) {
-        Write-Host "Install Package without checksum check"
-        choco install $package.Name -y --ignore-checksums
-    } else {
-        Write-Host "Install Package with checksum check"
-        choco install $package.Name -y
-    }
-
-    # Add package to installed package list
-    $installedPackages.Add($package.Name)
-
-    # Save update to file
-    $installedPackages | Out-File $installedPackagesPath
-}
 
 Remove-ItemProperty $runOnceRegistryPath -Name "UnattendInstall!"
 
