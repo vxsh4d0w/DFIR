@@ -167,7 +167,7 @@
 				<!-- Download customization script -->
 				<SynchronousCommand wcm:action="add">
 					<Order>4</Order>
-					<CommandLine>cmd /c powershell -ExecutionPolicy ByPass Invoke-WebRequest -Uri https://raw.githubusercontent.com/vxsh4d0w/DFIR/main/DFIR-Unattended-Windows/Configuration/configure.ps1 -OutFile C:\Windows\Temp\customize.ps1</CommandLine>
+					<CommandLine>cmd /c powershell -ExecutionPolicy ByPass Invoke-WebRequest -Uri https://raw.githubusercontent.com/vxsh4d0w/DFIR/main/DFIR-Unattended-Windows/Configuration/customize.ps1 -OutFile C:\Windows\Temp\customize.ps1</CommandLine>
 				</SynchronousCommand>
 				<!-- Execute customization script -->
 				<SynchronousCommand wcm:action="add">
