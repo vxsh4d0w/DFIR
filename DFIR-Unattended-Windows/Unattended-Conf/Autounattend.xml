@@ -7,7 +7,7 @@
 			<UserData>
 				<AcceptEula>true</AcceptEula>
 				<ProductKey>
-					<Key>W269N-WFGWX-YVC9B-4J6C9-T83GX</Key>
+					<Key></Key>
 					<WillShowUI>OnError</WillShowUI>
 				</ProductKey>
 			</UserData>
@@ -103,10 +103,10 @@
 			<UserLocale>en-US</UserLocale>
 		</component>
 		<component name="Microsoft-Windows-Shell-Setup" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" processorArchitecture="amd64">
-			<ComputerName>*</ComputerName>
-			<!-- choose a simple text is a part of computername -->
-			<RegisteredOwner>vx</RegisteredOwner>
-			<RegisteredOrganization>GIB</RegisteredOrganization>
+			<ComputerName>DFIRX</ComputerName>
+			<!-- Set your hostname -->
+			<RegisteredOwner>dfx</RegisteredOwner>
+			<RegisteredOrganization>DFIRX</RegisteredOrganization>
 		</component>
 		<component name="Microsoft-Windows-Deployment" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" processorArchitecture="amd64">
 			<RunSynchronous>
@@ -150,9 +150,9 @@
 							<PlainText>true</PlainText>
 						</Password>
 						<Description>Analyst account</Description>
-						<DisplayName>VX</DisplayName>
+						<DisplayName>DFX</DisplayName>
 						<Group>Administrators</Group>
-						<Name>vx</Name>
+						<Name>dfx</Name>
 					</LocalAccount>
 				</LocalAccounts>
 			</UserAccounts>
@@ -161,7 +161,7 @@
 					<Value>Changeme</Value>
 					<PlainText>true</PlainText>
 				</Password>
-				<Username>vx</Username>
+				<Username>dfx</Username>
 				<Enabled>true</Enabled>
 			</AutoLogon>
 			<FirstLogonCommands>
@@ -181,7 +181,7 @@
 					<CommandLine>cmd /c powershell -ExecutionPolicy ByPass  "&amp; 'C:\Windows\Temp\winfor-cli.exe' -Install -IncludeWsl"</CommandLine>
 				</SynchronousCommand>
 			</FirstLogonCommands>
-			<RegisteredOwner>vx</RegisteredOwner>
+			<RegisteredOwner>dfx</RegisteredOwner>
 			<TimeZone>W. Europe Standard Time</TimeZone>
 		</component>
 	</settings>
